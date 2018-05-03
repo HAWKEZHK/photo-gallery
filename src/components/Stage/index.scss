@@ -1,0 +1,20 @@
+.stage {
+  position: relative;
+  width: 100%;
+  height: 740px;
+}
+.img-sec {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #ddd;
+}
+.controller-nav {
+  z-index: 101;
+  position: absolute;
+  left: 0;
+  bottom: 30px;
+  width: 100%;
+  text-align: center;
+}
