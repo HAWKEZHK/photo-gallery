@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.scss'
 import {randomRange, degRandomRange} from '../../utils'
 import ImgFigure from '../ImgFigure'
+import ControllerUnit from '../ControllerUnit'
 import imgDatas from '../../core/imgDatas'
 
 class Stage extends Component {
@@ -15,13 +16,13 @@ class Stage extends Component {
         topRange: { x: [0, 0], y: [0, 0] },   // 顶部
         sideRange: { leftX: [0, 0], rightX: [0, 0], y: [0, 0] }   // 两侧
       },
-      // 每个图片组件信息 ———— pos、rotate、isInv、isCenter
+      // 每个图片组件信息 ———— pos、rotate、isInverse、isCenter
       imgsMsg: imgDatas.map(() => {
         return {
           pos: {left: 0, top: 0},
           rotate: 0,
           isCenter: false,
-          isInv: false
+          isInverse: false
         }
       })
     }
@@ -66,7 +67,7 @@ class Stage extends Component {
     centerImg.pos = centerPos
     centerImg.rotate = 0
     centerImg.isCenter = true
-    centerImg.isInv = false
+    centerImg.isInverse = false
     // 顶部区域
     const topImgIndex = Math.ceil(Math.random() * (imgsMsg.length - 1))
     const topImg = imgsMsg.splice(topImgIndex, 1)[0]
@@ -76,7 +77,7 @@ class Stage extends Component {
     }
     topImg.rotate = degRandomRange()
     topImg.isCenter = false
-    topImg.isInv = false
+    topImg.isInverse = false
     // 侧边区域
     for(let i = 0, len = imgsMsg.length; i < len; i++){
       let range = (i < len / 2) ? sideRange.leftX : sideRange.rightX
@@ -86,7 +87,7 @@ class Stage extends Component {
       }
       imgsMsg[i].rotate = degRandomRange()
       imgsMsg[i].isCenter = false
-      imgsMsg[i].isInv = false
+      imgsMsg[i].isInverse = false
     }
 
     // 重新塞回数组
@@ -98,14 +99,9 @@ class Stage extends Component {
   // 翻转
   inverse(index){
     const {imgsMsg} = this.state
-    imgsMsg[index].isInv = !imgsMsg[index].isInv
-    console.log(imgsMsg[index].isInv)
+    imgsMsg[index].isInverse = !imgsMsg[index].isInverse
+    console.log(imgsMsg[index].isInverse)
     this.setState({imgsMsg})
-  }
-
-  // 居中
-  center(index){
-    this.rearrange(index)
   }
 
   render(){
@@ -116,13 +112,17 @@ class Stage extends Component {
         if(isCenter){
           this.inverse(i)
         }else{
-          this.center(i)
+          this.rearrange(i)
         }
         e.stopPropagation()
       }
       imgFigures.push(
         <ImgFigure key={i} ref={`imgFigure_${i}`}
           data={el} msg={this.state.imgsMsg[i]} handleClick={handleClick} />
+      )
+      controllerUnits.push(
+        <ControllerUnit key={i}
+          msg={this.state.imgsMsg[i]} handleClick={handleClick} />
       )
     })
 

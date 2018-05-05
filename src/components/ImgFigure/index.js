@@ -6,9 +6,9 @@ class ImgFigure extends Component {
   render(){
     const {data, msg ,handleClick} = this.props,
           {imgSrc, title, desc} = data,
-          {pos, rotate, isCenter, isInv} = msg,
-          imgFigureClass = (isInv && isCenter) ? "img-figure is-center-inverse" : "img-figure",
-          styleObj = isCenter ? {...pos, zIndex: 101} : {...pos, transform: `rotate(${rotate}deg)`}
+          {pos, rotate, isCenter, isInverse} = msg,
+          imgFigureClass = (isInverse && isCenter) ? "img-figure is-center-inverse" : "img-figure",
+          styleObj = isCenter ? {...pos, zIndex: 11} : {...pos, transform: `rotate(${rotate}deg)`}
 
     return (
       <figure className={imgFigureClass} style={styleObj} onClick={handleClick}>
