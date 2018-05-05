@@ -8,7 +8,7 @@
   react + scss + webpack
  <br/>
 
-- 在线预览: [传送门](https://hawkezhk.github.io/)
+- 在线预览: [传送门](https://hawkezhk.github.io/photo-gallery)
  <br/>
 
 - 如何启动
