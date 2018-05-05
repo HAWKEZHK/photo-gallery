@@ -6,10 +6,10 @@
 - 技术栈
 
   react + scss + webpack
- <br/>
 
-- 在线预览: [传送门](https://hawkezhk.github.io/photo-gallery)
- <br/>
+- 预览
+
+  ![images](https://github.com/HAWKEZHK/photo-gallery/raw/master/overview.gif)
 
 - 如何启动
 
