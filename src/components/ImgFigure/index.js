@@ -4,12 +4,19 @@ import './index.scss'
 // 单个图片组件
 class ImgFigure extends Component {
   render(){
+    const {data, msg ,handleClick} = this.props,
+          {imgSrc, title, desc} = data,
+          {pos, rotate, isCenter, isInv} = msg,
+          imgFigureClass = (isInv && isCenter) ? "img-figure is-center-inverse" : "img-figure",
+          styleObj = isCenter ? {...pos, zIndex: 101} : {...pos, transform: `rotate(${rotate}deg)`}
+
     return (
-      <figure className="img-figure" style={this.props.msg.pos}>
-        <img src={this.props.data.imgSrc} alt={this.props.data.title} />
-        <figcaption>
-          <h2 className="img-title">{this.props.data.title}</h2>
-        </figcaption>
+      <figure className={imgFigureClass} style={styleObj} onClick={handleClick}>
+        <img src={imgSrc} alt={title} />
+        <figcaption><h2 className="img-title">{title}</h2></figcaption>
+        <div className="img-back" onClick={handleClick}>
+          <p>{desc}</p>
+        </div>
       </figure>
     )
   }

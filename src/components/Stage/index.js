@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import './index.scss'
-import {randomRange} from '../../utils'
+import {randomRange, degRandomRange} from '../../utils'
 import ImgFigure from '../ImgFigure'
 import imgDatas from '../../core/imgDatas'
 
@@ -15,10 +15,13 @@ class Stage extends Component {
         topRange: { x: [0, 0], y: [0, 0] },   // 顶部
         sideRange: { leftX: [0, 0], rightX: [0, 0], y: [0, 0] }   // 两侧
       },
-      // 每个图片组件信息 ———— pos、rotate、isInverse、isCenter
+      // 每个图片组件信息 ———— pos、rotate、isInv、isCenter
       imgsMsg: imgDatas.map(() => {
         return {
           pos: {left: 0, top: 0},
+          rotate: 0,
+          isCenter: false,
+          isInv: false
         }
       })
     }
@@ -61,6 +64,9 @@ class Stage extends Component {
     // 中心
     const centerImg = imgsMsg.splice(cIndex, 1)[0]
     centerImg.pos = centerPos
+    centerImg.rotate = 0
+    centerImg.isCenter = true
+    centerImg.isInv = false
     // 顶部区域
     const topImgIndex = Math.ceil(Math.random() * (imgsMsg.length - 1))
     const topImg = imgsMsg.splice(topImgIndex, 1)[0]
@@ -68,15 +74,19 @@ class Stage extends Component {
       left: randomRange(topRange.x[0], topRange.x[1]),
       top: randomRange(topRange.y[0], topRange.y[1])
     }
+    topImg.rotate = degRandomRange()
+    topImg.isCenter = false
+    topImg.isInv = false
     // 侧边区域
     for(let i = 0, len = imgsMsg.length; i < len; i++){
       let range = (i < len / 2) ? sideRange.leftX : sideRange.rightX
-      imgsMsg[i] = {
-        pos: {
-          left: randomRange(range[0], range[1]),
-          top: randomRange(sideRange.y[0], sideRange.y[1])
-        },
+      imgsMsg[i].pos = {
+        left: randomRange(range[0], range[1]),
+        top: randomRange(sideRange.y[0], sideRange.y[1])
       }
+      imgsMsg[i].rotate = degRandomRange()
+      imgsMsg[i].isCenter = false
+      imgsMsg[i].isInv = false
     }
 
     // 重新塞回数组
@@ -85,11 +95,37 @@ class Stage extends Component {
     this.setState({imgsMsg})
   }
 
+  // 翻转
+  inverse(index){
+    const {imgsMsg} = this.state
+    imgsMsg[index].isInv = !imgsMsg[index].isInv
+    console.log(imgsMsg[index].isInv)
+    this.setState({imgsMsg})
+  }
+
+  // 居中
+  center(index){
+    this.rearrange(index)
+  }
+
   render(){
     const [controllerUnits, imgFigures] = [[], []]
     imgDatas.forEach((el, i) => {
-      imgFigures.push(<ImgFigure key={i} ref={`imgFigure_${i}`} data={el} msg={this.state.imgsMsg[i]} />)
+      const {isCenter} = this.state.imgsMsg[i]
+      const handleClick = (e) => {
+        if(isCenter){
+          this.inverse(i)
+        }else{
+          this.center(i)
+        }
+        e.stopPropagation()
+      }
+      imgFigures.push(
+        <ImgFigure key={i} ref={`imgFigure_${i}`}
+          data={el} msg={this.state.imgsMsg[i]} handleClick={handleClick} />
+      )
     })
+
     return (
       <section className="stage" ref="stage">
         <section className="img-sec">
